@@ -1,5 +1,7 @@
 package algorithms.mazeGenerators;
 
+import java.nio.ByteBuffer;
+
 /**
  * Class that represent a 3 dimensions maze by 3 coordinate {x,y,z}.
  * The class contains bound position to mark the bounds of the maze,
@@ -32,6 +34,51 @@ public class Maze3d {
 			catch (IllegalArgumentException e) { 
 				throw e;
 			}
+	}
+	public Maze3d(byte[] b) {
+		// TODO Auto-generated constructor stub
+		int x,y,z,i = 36;
+		Position start = new Position();
+		Position goal = new Position();
+		Position size = new Position();
+		ByteBuffer buffer = ByteBuffer.wrap(b, 0, 36);
+		start.setX(buffer.getInt());
+		start.setY(buffer.getInt());
+		start.setZ(buffer.getInt());
+		goal.setX(buffer.getInt());
+		goal.setY(buffer.getInt());
+		goal.setZ(buffer.getInt());
+		size.setX(buffer.getInt());
+		size.setY(buffer.getInt());
+		size.setZ(buffer.getInt());
+		startPosition = new Position(start);
+		goalPosition = new Position(goal);
+		bounds = new Position(size);
+		maze = new int[size.getX()][size.getY()][size.getZ()];
+		for(y = 0; y<bounds.getY();y++) {
+			for(z = 0; z<bounds.getZ();z++) {
+				for(x = 0; x<bounds.getX();x++) {
+					maze[x][y][z] = (int) b[i];
+					i++;
+				}
+			}
+		}
+	}
+	public boolean equals(Object obj) {
+		int x,y,z;
+		if((((Maze3d)(obj)).getGoalPosition()).equals(this.getGoalPosition()) && (((Maze3d)(obj)).getStartPosition()).equals(this.getStartPosition()) && (((Maze3d)(obj)).getBounds()).equals(this.getBounds())) {
+			for(y = 0; y<bounds.getY();y++) {
+				for(z = 0; z<bounds.getZ();z++) {
+					for(x = 0; x<bounds.getX();x++) {
+						if((((Maze3d)(obj)).getMazeValue(new Position(x,y,z))) != (this.getMazeValue(new Position(x,y,z))))
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		return false; 
+		
 	}
 	/**
 	 * Getter for the bounds attribute.
@@ -283,5 +330,31 @@ public class Maze3d {
 	public Position getForward(Position place) {
 		Position forward = new Position(place.getX(), place.getY(), place.getZ() - 1);
 		return forward;
+	}
+	public byte[] toByteArray() {
+		
+		int mazeLength = bounds.getX()*bounds.getY()*bounds.getZ();
+		byte[] tempArray;
+		byte[] b = new byte[mazeLength + 36];
+		int x,z,y,k=0,i;
+		ByteBuffer buffer = ByteBuffer.allocate(36);
+		buffer.putInt(startPosition.getX()).putInt(startPosition.getY()).putInt(startPosition.getZ());
+		buffer.putInt(goalPosition.getX()).putInt(goalPosition.getY()).putInt(goalPosition.getZ());
+		buffer.putInt(bounds.getX()).putInt(bounds.getY()).putInt(bounds.getZ());
+		tempArray = buffer.array();
+		
+		for(i=0;i<tempArray.length;i++){
+			b[i] = tempArray[k];
+					k++;
+		}
+		for(y = 0; y<bounds.getY();y++) {
+			for(z = 0; z<bounds.getZ();z++) {
+				for(x = 0; x<bounds.getX();x++) {
+					b[i] = (byte) maze[x][y][z];
+					i++;
+				}
+			}	
+		}
+		return b;
 	}
 }
