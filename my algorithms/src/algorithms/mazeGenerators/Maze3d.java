@@ -35,8 +35,7 @@ public class Maze3d {
 				throw e;
 			}
 	}
-	public Maze3d(byte[] b) {
-		// TODO Auto-generated constructor stub
+	public Maze3d(byte[] b, byte[] check) {
 		int x,y,z,i = 36;
 		Position start = new Position();
 		Position goal = new Position();
