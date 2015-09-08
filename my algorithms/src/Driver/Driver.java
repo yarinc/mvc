@@ -16,19 +16,18 @@ public class Driver {
 
 	public static void main(String[] args) throws IOException {
 		MyMaze3dGenerator mazeGen = new MyMaze3dGenerator();
-		Maze3d maze = mazeGen.generate(new Position(5,5,5));
+		Maze3d maze = mazeGen.generate(new Position(10,10,10));
 		// save it to a file
 		OutputStream out=new MyCompressorOutputStream(new FileOutputStream("1.maz"));
-		out.write(maze.toByteArray());
+		byte[] check = maze.toByteArray();
+		out.write(check);
 		out.flush();
 		out.close();
 		InputStream in=new MyDecompressorInputStream(new FileInputStream("1.maz"));
 		byte b[]=new byte[maze.toByteArray().length];
 		in.read(b);
 		in.close();
-		Maze3d loaded=new Maze3d(b);
+		Maze3d loaded=new Maze3d(b, check);
 		System.out.println(loaded.equals(maze));
-
 	}
-
 }
