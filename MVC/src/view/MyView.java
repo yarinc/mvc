@@ -10,5 +10,6 @@ public class MyView implements View {
 	public void start() throws IOException {
 		CLI cli = new CLI(null, null, null);
 		cli.start();
+		
 	} 
 }
