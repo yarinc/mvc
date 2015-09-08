@@ -16,14 +16,18 @@ public class MyCompressorOutputStream extends OutputStream {
 	}
 	public void write(byte[] b) throws IOException {
 		int i, counter = 1;
-		for(i = 0; i<b.length - 1;i++) { 
-			if(b[i] != b[i+1]) { 
-				out.write(b[i]);
+		for(i = 1; i<b.length;i++) {
+			if(b[i-1] != b[i]) { 
+				out.write(b[i-1]);
 				out.write(counter);
 				counter = 1;
 			}
-			else  
+			else
 				counter++;
+			if(i == (b.length - 1)) {
+				out.write(b[i]);
+				out.write(counter);
+			}
 		}
 	}
 

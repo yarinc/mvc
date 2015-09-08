@@ -15,17 +15,17 @@ public class MyDecompressorInputStream extends InputStream {
 		return in.read();
 	}
 	public int read(byte[] b) throws IOException {
-		int loop, counter, c, i;
-		for(i=0;i<36;i++){
-			c=in.read();
-			b[i] = (byte) c;
-		}
+		int loop, counter, c, i=0;
 		while ((c = in.read()) != -1) {
 			counter = in.read();
-			for(loop = 0 ;loop < counter ;loop++) {
-				b[i] = (byte) c;
-				i++;
+			if(counter != -1){
+				for(loop = 0 ;loop < counter ;loop++) {
+					b[i] = (byte) c;
+					i++;
+				}
 			}
+			else
+				System.out.println("BLABLA");
 		}
 		return 0; 
 		
