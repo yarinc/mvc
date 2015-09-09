@@ -1,15 +1,11 @@
 package view;
 
-import java.io.IOException;
-
-import controller.MyController;
+import controller.Controller;
 
 public class MyView implements View {
-	private MyController controller;
-
-	public void start() throws IOException {
-		CLI cli = new CLI(null, null, null);
-		cli.start();
-		
-	} 
+	private Controller controller; 
+	
+	public void SetController(Controller controller) { 
+		this.controller = controller; 
+	}
 }

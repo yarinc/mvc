@@ -1,8 +1,11 @@
 package model;
 
-import controller.MyController;
+import controller.Controller;
 
 public class MyModel implements Model {
-	private MyController controller; 
+	private Controller controller; 
 	
+	public void SetController(Controller controller) { 
+		this.controller = controller;
+	}
 }

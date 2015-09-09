@@ -1,5 +1,6 @@
 package view;
 
-public interface View {
+import java.io.IOException;
 
+public interface View {
 }

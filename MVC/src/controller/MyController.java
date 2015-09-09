@@ -1,13 +1,14 @@
 package controller;
 
-import model.MyModel;
-import view.MyView;
+
+import model.Model;
+import view.View;
 
 public class MyController implements Controller {
-	private MyModel model; 
-	private MyView view;
+	private Model model; 
+	private View view;
 	
-	public MyController(MyModel model, MyView view) { 
+	public MyController(Model model, View view) { 
 		this.model = model; 
 		this.view = view;
 	}
