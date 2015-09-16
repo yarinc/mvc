@@ -1,7 +1,5 @@
 package boot;
 
-import javax.swing.text.View;
-
 import controller.MyController;
 import model.MyModel;
 import view.MyView;
@@ -12,6 +10,9 @@ public class Run {
 		MyModel model = new MyModel();
 		MyView view = new MyView();
 		MyController controller = new MyController(model, view); 
+		model.SetController(controller);
+		view.SetController(controller);
+		view.start();
 
 	}
 
