@@ -10,7 +10,7 @@ public abstract class AbstractCommand {
 	
 	public AbstractCommand(View view, Model model) { 
 		this.view = view;
-		this.model = model; 
+		this.model = model;
 	}
 	public void setParameters(String[] parameters) { 
 		this.parameters = parameters; 
