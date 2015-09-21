@@ -7,19 +7,16 @@ public class MazeGenerator extends AbstractCommand implements Command, Runnable 
 
 	public MazeGenerator(View view, Model model) {
 		super(view, model);
+		
 	}
 
 	@Override
 	public void doCommand(String[] parameters) {
-		model.CreateMaze();
+		model.CreateMaze(parameters);
 	}
 
 	@Override
 	public void run() {
-		start();
-	}
-
-	public void start() {
 		model.MazeGen(parameters);
 	}
 }
