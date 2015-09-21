@@ -9,14 +9,25 @@ import algorithms.search.Solution;
 import model.Model;
 import view.View;
 
+/**
+ * The Class MyController implements Controller interface 
+ * and act as mediator between the view and the model.
+ */
 public class MyController implements Controller {
+	
 	private Model model; 
 	private View view;
 	private HashMap<String,Command> map;
 	
+	/**
+	 * Instantiates a new MyController object.
+	 * @param model the model
+	 * @param view the view
+	 */
 	public MyController(Model model, View view) { 
 		this.model = model; 
 		this.view = view;
+		//Initiate HashMap with all commands
 		map = new HashMap<String,Command>();
 		map.put("dir", new Dir(view, model));
 		map.put("generate", new MazeGenerator(view,model));
@@ -31,35 +42,58 @@ public class MyController implements Controller {
 		map.put("exit", new Exit(view,model));
 	}
 	
+	/* (non-Javadoc)
+	 * @see controller.Controller#fileListToView(java.lang.String[])
+	 */
 	@Override
 	public void fileListToView(String[] list) {
 		view.PrintStringArray(list);
 	}
+	
+	/* (non-Javadoc)
+	 * @see controller.Controller#getView()
+	 */
 	public View getView() { 
 		return view;
 	}
 
+	/* (non-Javadoc)
+	 * @see controller.Controller#readyToPrint(java.lang.String)
+	 */
 	@Override
 	public void readyToPrint(String string) {
 		view.printString(string);
 	}
 
+	/* (non-Javadoc)
+	 * @see controller.Controller#mazeToView(algorithms.mazeGenerators.Maze3d)
+	 */
 	@Override
 	public void mazeToView(Maze3d maze) {
 		view.PrintMaze(maze);
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see controller.Controller#crossMazeToView(algorithms.mazeGenerators.Maze3d, int[][])
+	 */
 	@Override
 	public void crossMazeToView(Maze3d maze, int[][] maze2d) {
 		view.PrintCrossMaze(maze, maze2d);
 	}
+	
+	/* (non-Javadoc)
+	 * @see controller.Controller#solutionToView(algorithms.search.Solution)
+	 */
 	@Override
 	public void solutionToView(Solution<Position> solution) {
 		view.solutionToPrint(solution);
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see controller.Controller#activateCommand(java.lang.String, java.lang.String[])
+	 */
 	@Override
 	public void activateCommand(String string, String[] parameters) {
 		try { 
@@ -68,12 +102,19 @@ public class MyController implements Controller {
 			view.printString("Invalid object");
 		}
 	}
+	
+	/* (non-Javadoc)
+	 * @see controller.Controller#manipulateInput(java.lang.String)
+	 */
 	@Override
 	public void manipulateInput(String line) {
+		//If the input is not 'exit' and it contain one word than command not found.
 		if((line.split(" ").length <= 1) && (!line.equals("exit")))
 			view.printString("Command not found");
 		else {
+			//Separate input by space
 			String command[] = line.split(" ");
+			//Validate the input by 'validateCommand' method.
 			switch (command[0]) { 
 			case "dir" : validateCommand(line, "dir", 4, 1);
 						break;
@@ -97,32 +138,47 @@ public class MyController implements Controller {
 			}
 		}
 	}
+	
+	/**
+	 * Validate command checks that the input is a defined command.
+	 * @param input the input from the user
+	 * @param command the command identifier on the HashMap
+	 * @param commandLength the command length
+	 * @param numOfParameters the number of parameters
+	 */
 	public void validateCommand(String input, String command, int commandLength, int numOfParameters){
 		String[] parameters;
-		if(input.startsWith(command)) {
+		//If input starts with the command identifier.
+		if((input.startsWith(command) || (input.startsWith("display " + command)))) {
+			//Extract the parameters and validate their number.
 			parameters = (input.substring(commandLength)).split(" ");
+			//If parameter number is OK - activate the desired command.
 			if(parameters.length == numOfParameters)
 				activateCommand(command, parameters);
+			//Else - send error.
 			else
 				view.printString("Parameters error");
 		}
 	}
-	public void displayCommands(String input, String[] splitedCommand) {
-		if((splitedCommand[1].equals("cross")) && (splitedCommand.length > 2)) 
-			validateDisplayCommand(input, "cross", 25, 4);
-		else if(splitedCommand.length == 2)
-			validateDisplayCommand(input, "display", 8, 1);
-		else if ((splitedCommand[1].equals("solution")) && (splitedCommand.length == 3)) 
-			validateDisplayCommand(input, "solution", 17, 1);
-	}
-	public void validateDisplayCommand(String input, String command, int commandLength, int numOfParameters){
-		String[] parameters;
-		if((input.startsWith(command)|| (input.startsWith("display " + command)))) {
-			parameters = (input.substring(commandLength)).split(" ");
-			if(parameters.length == numOfParameters)
-				activateCommand(command, parameters);
-			else
-				view.printString("Parameters error");
-		}
+	
+	/**
+	 * Display commands used to separate between all the 'display'
+	 * commands and decide which command to initiate.
+	 * @param input the input from the user
+	 * @param splittedCommand the splitted command
+	 */
+	public void displayCommands(String input, String[] splittedCommand) {
+		//If the second word is 'cross' and it's length is more then 2 - validate the display command.
+		if((splittedCommand[1].equals("cross")) && (splittedCommand.length > 2)) 
+			validateCommand(input, "cross", 25, 4);
+		//If the length is 2 - validate the display command.
+		else if(splittedCommand.length == 2)
+			validateCommand(input, "display", 8, 1);
+		//If the second word is 'solution' and it's length is 3 - validate the display command.
+		else if ((splittedCommand[1].equals("solution")) && (splittedCommand.length == 3)) 
+			validateCommand(input, "solution", 17, 1);
+		//Else - print command not found.
+		else
+			view.printString("Command not found.");
 	}
 }

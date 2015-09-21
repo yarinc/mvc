@@ -10,7 +10,6 @@ import view.CLI;
 import view.MyView;
 
 public class Run {
-
 	public static void main(String[] args) {
 		CLI cli = new CLI(new BufferedReader(new InputStreamReader(System.in)),new PrintWriter(System.out));
 		MyModel model = new MyModel();
