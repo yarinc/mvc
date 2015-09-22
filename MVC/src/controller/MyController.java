@@ -4,8 +4,6 @@ package controller;
 import java.util.HashMap;
 
 import algorithms.mazeGenerators.Maze3d;
-import algorithms.mazeGenerators.Position;
-import algorithms.search.Solution;
 import model.Model;
 import view.View;
 
@@ -29,17 +27,17 @@ public class MyController implements Controller {
 		this.view = view;
 		//Initiate HashMap with all commands
 		map = new HashMap<String,Command>();
-		map.put("dir", new Dir(view, model));
-		map.put("generate", new MazeGenerator(view,model));
-		map.put("display", new Display(view,model));
-		map.put("cross", new DisplayCross(view,model));
-		map.put("save", new SaveMaze(view,model));
-		map.put("load", new LoadMaze(view,model));
-		map.put("maze", new MazeSize(view,model));
-		map.put("file", new FileSize(view,model));
-		map.put("solve", new Solve(view,model));
-		map.put("solution", new DisplaySolution(view,model));
-		map.put("exit", new Exit(view,model));
+		map.put("dir", new Dir(this.view,this.model));
+		map.put("generate", new MazeGenerator(this.view,this.model));
+		map.put("display", new Display(this.view,this.model));
+		map.put("cross", new DisplayCross(this.view,this.model));
+		map.put("save", new SaveMaze(this.view,this.model));
+		map.put("load", new LoadMaze(this.view,this.model));
+		map.put("maze", new MazeSize(this.view,this.model));
+		map.put("file", new FileSize(this.view,this.model));
+		map.put("solve", new Solve(this.view,this.model));
+		map.put("solution", new DisplaySolution(this.view,this.model));
+		map.put("exit", new Exit(this.view,this.model));
 	}
 	
 	/* (non-Javadoc)
@@ -66,29 +64,11 @@ public class MyController implements Controller {
 	}
 
 	/* (non-Javadoc)
-	 * @see controller.Controller#mazeToView(algorithms.mazeGenerators.Maze3d)
-	 */
-	@Override
-	public void mazeToView(Maze3d maze) {
-		view.PrintMaze(maze);
-		
-	}
-
-	/* (non-Javadoc)
 	 * @see controller.Controller#crossMazeToView(algorithms.mazeGenerators.Maze3d, int[][])
 	 */
 	@Override
 	public void crossMazeToView(Maze3d maze, int[][] maze2d) {
 		view.PrintCrossMaze(maze, maze2d);
-	}
-	
-	/* (non-Javadoc)
-	 * @see controller.Controller#solutionToView(algorithms.search.Solution)
-	 */
-	@Override
-	public void solutionToView(Solution<Position> solution) {
-		view.solutionToPrint(solution);
-		
 	}
 
 	/* (non-Javadoc)
@@ -151,13 +131,17 @@ public class MyController implements Controller {
 		//If input starts with the command identifier.
 		if((input.startsWith(command) || (input.startsWith("display " + command)))) {
 			//Extract the parameters and validate their number.
-			parameters = (input.substring(commandLength)).split(" ");
+			try {
+				parameters = (input.substring(commandLength)).split(" ");
 			//If parameter number is OK - activate the desired command.
 			if(parameters.length == numOfParameters)
 				activateCommand(command, parameters);
 			//Else - send error.
 			else
 				view.printString("Parameters error");
+			} catch (IndexOutOfBoundsException e) { 
+				view.printString("Please check command.");
+			}
 		}
 	}
 	

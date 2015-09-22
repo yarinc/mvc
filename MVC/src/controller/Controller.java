@@ -1,8 +1,6 @@
 package controller;
 
 import algorithms.mazeGenerators.Maze3d;
-import algorithms.mazeGenerators.Position;
-import algorithms.search.Solution;
 import view.View;
 
 /**
@@ -29,23 +27,11 @@ public interface Controller {
 	void readyToPrint(String string);
 	
 	/**
-	 * Sending a maze to view.
-	 * @param maze3d the maze3d
-	 */
-	void mazeToView(Maze3d maze3d);
-	
-	/**
 	 * Sending a 2D maze to the view.
 	 * @param crossMaze the 3D maze
 	 * @param maze2d the 2D maze
 	 */
 	void crossMazeToView(Maze3d crossMaze, int[][] maze2d);
-	
-	/**
-	 * Sending a solution to the view.
-	 * @param solution the solution
-	 */
-	void solutionToView(Solution<Position> solution);
 	
 	/**
 	 * Activating the relevant command.

@@ -95,8 +95,7 @@ public class MyModel implements Model {
 	 */
 	@Override
 	public void GetMaze(String[] parameters) {
-		controller.mazeToView(mazes.get(parameters[0]));
-		
+		controller.readyToPrint(mazes.get(parameters[0]).toString());
 	}
 
 	/* (non-Javadoc)
@@ -107,14 +106,18 @@ public class MyModel implements Model {
 		//Extract the cross section.
 		Maze3d crossMaze = mazes.get(parameters[3]); 
 		//Send the Cross maze to print depends on the cross section.
-		if(parameters[0].equals("X"))
-			controller.crossMazeToView(crossMaze, crossMaze.getCrossSectionByX(Integer.parseInt(parameters[1])));
-		else if(parameters[0].equals("Y"))
-			controller.crossMazeToView(crossMaze, crossMaze.getCrossSectionByY(Integer.parseInt(parameters[1])));
-		else if(parameters[0].equals("Z"))
-			controller.crossMazeToView(crossMaze, crossMaze.getCrossSectionByZ(Integer.parseInt(parameters[1])));
-		else
-			controller.readyToPrint("Invalid cross section.");
+		try { 
+			if(parameters[0].equals("X"))
+				controller.crossMazeToView(crossMaze, crossMaze.getCrossSectionByX(Integer.parseInt(parameters[1])));
+			else if(parameters[0].equals("Y"))
+				controller.crossMazeToView(crossMaze, crossMaze.getCrossSectionByY(Integer.parseInt(parameters[1])));
+			else if(parameters[0].equals("Z"))
+				controller.crossMazeToView(crossMaze, crossMaze.getCrossSectionByZ(Integer.parseInt(parameters[1])));
+			else
+				controller.readyToPrint("Cross section can be defined by X,Y or Z.");
+		} catch (IndexOutOfBoundsException e) { 
+			controller.readyToPrint("Invalid index enterd.");
+		}
 	}
 
 	/* (non-Javadoc)
@@ -295,10 +298,10 @@ public class MyModel implements Model {
 	@Override
 	public void getSolution(String[] parameters) {
 		try { 
-			controller.solutionToView(solutions.get(parameters[0]));
+			controller.readyToPrint(solutions.get(parameters[0]).toString());
 		} catch (NullPointerException e) {
 			//In case an exception throws - send relevant message.
-			controller.readyToPrint("invalid maze name.");
+			controller.readyToPrint("Invalid maze name.");
 		}
 	}
 

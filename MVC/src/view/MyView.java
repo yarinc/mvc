@@ -1,8 +1,6 @@
 package view;
 
 import algorithms.mazeGenerators.Maze3d;
-import algorithms.mazeGenerators.Position;
-import algorithms.search.Solution;
 import controller.Controller;
 
 /**
@@ -53,17 +51,7 @@ public class MyView implements View {
 	@Override
 	public void printString(String string) {
 		cli.getOut().println(string); 
-		cli.getOut().flush();
-		
-	}
-	
-	/* (non-Javadoc)
-	 * @see view.View#PrintMaze(algorithms.mazeGenerators.Maze3d)
-	 */
-	@Override
-	public void PrintMaze(Maze3d maze) {
-		maze.printMaze();
-		cli.getOut().flush();
+		cli.getOut().flush();	
 	}
 	
 	/* (non-Javadoc)
@@ -72,14 +60,6 @@ public class MyView implements View {
 	@Override
 	public void PrintCrossMaze(Maze3d maze, int[][] maze2d) {
 		maze.print2d(maze2d);
-	}
-	
-	/* (non-Javadoc)
-	 * @see view.View#solutionToPrint(algorithms.search.Solution)
-	 */
-	@Override
-	public void solutionToPrint(Solution<Position> solution) {
-		solution.print();
 	}
 	
 	/* (non-Javadoc)
