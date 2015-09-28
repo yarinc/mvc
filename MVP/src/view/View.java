@@ -28,4 +28,10 @@ public interface View {
 	 * @param maze2d the 2D maze
 	 */
 	public void PrintCrossMaze(int[][] maze2d);
+	
+	/**
+	 * Sending input to the presenter.
+	 * @param line the input
+	 */
+	public void inputToPresenter(String line);
 }

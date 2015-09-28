@@ -3,16 +3,16 @@ package view;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Observable;
+
 
 /**
  * The Class CLI starts in a new thread a CLI for the user.
  */
-public class CLI extends Observable implements View, Runnable {
+public class CLI implements Runnable {
 	
 	private BufferedReader in; 
 	private PrintWriter out;
-	
+	private View view;
 	/**
 	 * Gets in.
 	 * @return the in
@@ -20,7 +20,15 @@ public class CLI extends Observable implements View, Runnable {
 	public BufferedReader getIn() {
 		return in;
 	}
-
+	
+	/**
+	 * Sets the view.
+	 * @param view the new view
+	 */
+	public void setView(View view) { 
+		this.view = view;
+	}
+	
 	/**
 	 * Gets out.
 	 * @return the out
@@ -56,45 +64,13 @@ public class CLI extends Observable implements View, Runnable {
 			//Getting the input from the BufferdReader as long as it's not 'exit'.
 			while (!(line = in.readLine()).equals("exit")) {
 				//sending the input to the presenter.
-				this.setChanged();
-				this.notifyObservers(line);
+				view.inputToPresenter(line);
 			}
 			//'exit' has entered - sending it to the presenter.
-			this.setChanged();
-			this.notifyObservers(line);
+			view.inputToPresenter(line);
 		} catch (IOException e) {
 			//In case an exception throws - send relevant message.
-			this.setChanged();
-			this.notifyObservers("I/O error occurred.");
+			view.printString("I/O error occurred.");
 		}
-	}
-
-	@Override
-	public void PrintStringArray(String[] string) {
-		for(String s:string)
-			out.println(s);
-		out.flush();
-	}
-
-	@Override
-	public void printString(String string) {
-		out.println(string); 
-		out.flush();
-	}
-
-	@Override
-	public void PrintCrossMaze(int[][] maze2d) {
-		int i,j;
-		for(i=0;i<maze2d.length;i++){
-			out.print("[");
-			for(j=0;j<maze2d[i].length;j++){
-					out.print(maze2d[i][j]);
-					if(j != maze2d[i].length - 1)
-						out.print(", ");
-				}
-			out.println("]");
-		}
-	out.print("\n");
-	out.flush();
 	}
 }
