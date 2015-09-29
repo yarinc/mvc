@@ -1,14 +1,22 @@
 package model;
 
+import java.beans.XMLDecoder;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import algorithms.demo.Maze3dSearch;
 import algorithms.mazeGenerators.Maze3d;
@@ -21,6 +29,7 @@ import algorithms.search.Solution;
 import io.MyCompressorOutputStream;
 import io.MyDecompressorInputStream;
 import presenter.MazeGenerator;
+import presenter.Properties;
 import presenter.Solve;
 
 /**
@@ -29,19 +38,43 @@ import presenter.Solve;
  */
 public class MyModel extends Observable implements Model {
 
-	HashMap<String, Maze3d> mazes;
-	HashMap<String, Solution<Position>> solutions;
-	HashMap<String,String> files;
-	ArrayList<Thread> threads;
+	private HashMap<String, Maze3d> mazes;
+	private HashMap<String, Solution<Position>> solutions;
+	private HashMap<String,String> files;
+	private HashMap<Maze3d,Solution<Position>> cachedMazes;
+	private ArrayList<Thread> threads;
+	private ExecutorService executor;
+	private Properties properties;
+
 	
 	/**
 	 * Instantiates a new MyModel object.
 	 */
+	@SuppressWarnings("unchecked")
 	public MyModel() {
 		mazes = new HashMap<String,Maze3d>();
 		solutions = new HashMap<String,Solution<Position>>();
 		files = new HashMap<String,String>();
+		try {
+			XMLDecoder decoder = new XMLDecoder(new BufferedInputStream(new FileInputStream("c:\\temp\\properties.xml")));
+			this.properties = (Properties)decoder.readObject();
+			decoder.close();
+		} catch (FileNotFoundException e) { 
+			e.printStackTrace();
+		}
+		try {
+				FileInputStream fis=new FileInputStream("C:\\temp\\cachedMazes.gz");
+				cachedMazes = new HashMap<Maze3d,Solution<Position>>();
+				GZIPInputStream gzis=new GZIPInputStream(fis);
+				ObjectInputStream in=new ObjectInputStream(gzis);
+				cachedMazes=(HashMap<Maze3d,Solution<Position>>)in.readObject();
+				in.close();
+		} catch (IOException | ClassNotFoundException e) { 
+			cachedMazes = new HashMap<Maze3d,Solution<Position>> ();
+		}
+
 		threads = new ArrayList<Thread>();
+		executor = Executors.newFixedThreadPool(properties.getNumberOfThreads());
 	}
 
 	/* (non-Javadoc)
@@ -62,16 +95,14 @@ public class MyModel extends Observable implements Model {
 		//Create object require to generate a maze on a different thread.
 		mazeGenerator.setParameters(parameters);
 		//Pack the object with Thread class, add the object to the threads list, and activate the thread.
-		Thread mazeGen = new Thread(mazeGenerator);
-		threads.add(mazeGen);
-		mazeGen.start();
+		executor.submit(mazeGenerator);
 	}
 
 	/* (non-Javadoc)
 	 * @see model.Model#MazeGen(java.lang.String[])
 	 */
 	@Override
-	public void MazeGen(String[] parameters) {
+	public Maze3d MazeGen(String[] parameters) {
 		//Create Position object to mark the maze size, and create it.
 		Position p = new Position(Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]),Integer.parseInt(parameters[3]));
 		Maze3d maze = new MyMaze3dGenerator().generate(p);
@@ -80,6 +111,7 @@ public class MyModel extends Observable implements Model {
 		//Send a relevant message.
 		this.setChanged();
 		this.notifyObservers("maze " + parameters[0] + " is ready.");
+		return maze;
 	}
 
 	/* (non-Javadoc)
@@ -258,54 +290,66 @@ public class MyModel extends Observable implements Model {
 		//Create object require to solve a maze on a different thread.
 		solve.setParameters(parameters);
 		//Pack the object with Thread class, add the object to the threads list, and activate the thread.
-		Thread solutionGen = new Thread(solve);
-		threads.add(solutionGen);
-		solutionGen.start();
+		executor.submit(solve);
 	}
 
 	/* (non-Javadoc)
 	 * @see model.Model#solutionGenerator(java.lang.String[])
 	 */
 	@Override
-	public void solutionGenerator(String[] parameters) {
-		try {
-			//In case the algorithm is BFS.
-			if(parameters[1].equals("BFS")) { 
-				//Create a BFS object.
-				BFS<Position> bfs = new BFS<Position>();
-				//Wrap the maze with object adapter.
-				Maze3dSearch search = new Maze3dSearch(mazes.get(parameters[0]));
-				//Solve the maze.
-				Solution<Position> solutionByBFS = bfs.search(search);
-				//Add solution to the HashMap and send relevant message.
-				solutions.put(parameters[0], solutionByBFS);
+	public Solution<Position> solutionGenerator(String[] parameters) {
+		if(!cachedMazes.containsKey(mazes.get(parameters[0]))) {	
+			try {
+				//In case the algorithm is BFS.
+				if(parameters[1].equals("BFS")) { 
+					//Create a BFS object.
+					BFS<Position> bfs = new BFS<Position>();
+					//Wrap the maze with object adapter.
+					Maze3dSearch search = new Maze3dSearch(mazes.get(parameters[0]));
+					//Solve the maze.
+					Solution<Position> solutionByBFS = bfs.search(search);
+					//Add solution to the HashMap and send relevant message.
+					solutions.put(parameters[0], solutionByBFS);
+					cachedMazes.put(mazes.get(parameters[0]), solutionByBFS);
+					this.zipAndSave();
+					this.setChanged();
+					this.notifyObservers("Solution for " + parameters[0] + " is ready.");
+					return solutionByBFS;
+				}
+				//In case the algorithm is AStar.
+				else if(parameters[1].equals("AStar")) { 
+					//Create a manhattanDistance object.
+					ManhattanDistance manhattan = new ManhattanDistance();
+					//Wrap the maze with object adapter.
+					Maze3dSearch search = new Maze3dSearch(mazes.get(parameters[0]));
+					//Create a AStar object.
+					AStar<Position> aStar = new AStar<>(manhattan);
+					//Solve the maze.
+					Solution<Position> solutionByManhattan = aStar.search(search);
+					//Add solution to the HashMap and send relevant message.
+					solutions.put(parameters[0], solutionByManhattan);
+					cachedMazes.put(mazes.get(parameters[0]), solutionByManhattan);
+					this.zipAndSave();
+					this.setChanged();
+					this.notifyObservers("Solution for " + parameters[0] + " is ready.");
+					return solutionByManhattan;
+				}
+				//Any other case.
+				else { 
+					this.setChanged();
+					this.notifyObservers("Algorithm not found.");
+				}
+			} catch(NullPointerException e) { 
+				//In case an exception throws - send relevant message.
 				this.setChanged();
-				this.notifyObservers("Solution for " + parameters[0] + " is ready.");
+				this.notifyObservers("Invalid maze name.");
 			}
-			//In case the algorithm is AStar.
-			else if(parameters[1].equals("AStar")) { 
-				//Create a manhattanDistance object.
-				ManhattanDistance manhattan = new ManhattanDistance();
-				//Wrap the maze with object adapter.
-				Maze3dSearch search = new Maze3dSearch(mazes.get(parameters[0]));
-				//Create a AStar object.
-				AStar<Position> aStar = new AStar<>(manhattan);
-				//Solve the maze.
-				Solution<Position> solutionByManhattan = aStar.search(search);
-				//Add solution to the HashMap and send relevant message.
-				solutions.put(parameters[0], solutionByManhattan);
-				this.setChanged();
-				this.notifyObservers("Solution for " + parameters[0] + " is ready.");
-			}
-			//Any other case.
-			else { 
-				this.setChanged();
-				this.notifyObservers("Algorithm not found.");
-			}
-		} catch(NullPointerException e) { 
-			//In case an exception throws - send relevant message.
+			return null;
+		}
+		else {
 			this.setChanged();
-			this.notifyObservers("Invalid maze name.");
+			this.notifyObservers("Solution for " + parameters[0] + " is ready.");
+			return cachedMazes.get(mazes.get(parameters[0]));
 		}
 	}
 
@@ -344,5 +388,19 @@ public class MyModel extends Observable implements Model {
 		//Send message.
 		this.setChanged();
 		this.notifyObservers("Goodbye.");
+	}
+	public void zipAndSave(){
+		try {
+			FileOutputStream fos=new FileOutputStream("c:\\temp\\cachedMazes.gz");
+		    GZIPOutputStream gzos=new GZIPOutputStream(fos);
+		    ObjectOutputStream out=new ObjectOutputStream(gzos);
+		    out.writeObject(cachedMazes);
+		    out.flush();
+		    out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+//			this.setChanged();
+//			this.notifyObservers("Fatal Error.");
+		  }
 	}
 }

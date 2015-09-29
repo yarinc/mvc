@@ -1,12 +1,15 @@
 package presenter;
 
+import java.util.concurrent.Callable;
+
+import algorithms.mazeGenerators.Maze3d;
 import model.Model;
 import view.View;
 
 /**
  * The Class MazeGenerator generate a new maze on a different thread.
  */
-public class MazeGenerator extends AbstractCommand implements Command, Runnable {
+public class MazeGenerator extends AbstractCommand implements Command, Callable<Maze3d> {
 
 	/**
 	 * Instantiates a new MazeGenerator object.
@@ -26,11 +29,8 @@ public class MazeGenerator extends AbstractCommand implements Command, Runnable 
 		model.CreateMaze(parameters, this);
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Runnable#run()
-	 */
 	@Override
-	public void run() {
-		model.MazeGen(parameters);
+	public Maze3d call() throws Exception {
+		return model.MazeGen(parameters);
 	}
 }

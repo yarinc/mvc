@@ -1,5 +1,9 @@
 package presenter;
 
+import java.util.concurrent.Callable;
+
+import algorithms.mazeGenerators.Position;
+import algorithms.search.Solution;
 import model.Model;
 import view.View;
 
@@ -7,7 +11,7 @@ import view.View;
  * The Class Solve gets a maze name
  * and an algorithm and solves the maze.
  */
-public class Solve extends AbstractCommand implements Command, Runnable {
+public class Solve extends AbstractCommand implements Command, Callable<Solution<Position>> {
 
 	/**
 	 * Instantiates a new Solve object.
@@ -27,13 +31,9 @@ public class Solve extends AbstractCommand implements Command, Runnable {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Runnable#run()
-	 */
 	@Override
-	public void run() {
-		model.solutionGenerator(parameters);
-		
+	public Solution<Position> call() throws Exception {
+		return model.solutionGenerator(parameters);
 	}
 
 }

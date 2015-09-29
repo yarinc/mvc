@@ -1,5 +1,8 @@
 package model;
 
+import algorithms.mazeGenerators.Maze3d;
+import algorithms.mazeGenerators.Position;
+import algorithms.search.Solution;
 import presenter.MazeGenerator;
 import presenter.Solve;
 
@@ -25,7 +28,7 @@ public interface Model {
 	 * Generate maze with the given parameters.
 	 * @param parameters the parameters
 	 */
-	void MazeGen(String[] parameters);
+	Maze3d MazeGen(String[] parameters);
 	
 	/**
 	 * Selecting the maze from a HashMap of mazes.
@@ -74,7 +77,7 @@ public interface Model {
 	 * Solve a maze with the given algorithm.
 	 * @param parameters the parameters
 	 */
-	void solutionGenerator(String[] parameters);
+	Solution<Position> solutionGenerator(String[] parameters);
 	
 	/**
 	 * Sending the solution to a maze to the view.
