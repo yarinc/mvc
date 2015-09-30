@@ -63,7 +63,7 @@ public class MyModel extends Observable implements Model {
 			e.printStackTrace();
 		}
 		try {
-				FileInputStream fis=new FileInputStream("C:\\temp\\cachedMazes.gz");
+				FileInputStream fis=new FileInputStream(properties.getCacheFileLocation());
 				cachedMazes = new HashMap<Maze3d,Solution<Position>>();
 				GZIPInputStream gzis=new GZIPInputStream(fis);
 				ObjectInputStream in=new ObjectInputStream(gzis);
@@ -391,7 +391,7 @@ public class MyModel extends Observable implements Model {
 	}
 	public void zipAndSave(){
 		try {
-			FileOutputStream fos=new FileOutputStream("c:\\temp\\cachedMazes.gz");
+			FileOutputStream fos=new FileOutputStream(properties.getCacheFileLocation());
 		    GZIPOutputStream gzos=new GZIPOutputStream(fos);
 		    ObjectOutputStream out=new ObjectOutputStream(gzos);
 		    out.writeObject(cachedMazes);
