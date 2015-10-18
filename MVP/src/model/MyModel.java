@@ -23,6 +23,7 @@ import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.MyMaze3dGenerator;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.AStar;
+import algorithms.search.AirDistance;
 import algorithms.search.BFS;
 import algorithms.search.ManhattanDistance;
 import algorithms.search.Solution;
@@ -56,7 +57,7 @@ public class MyModel extends Observable implements Model {
 		solutions = new HashMap<String,Solution<Position>>();
 		files = new HashMap<String,String>();
 		try {
-			XMLDecoder decoder = new XMLDecoder(new BufferedInputStream(new FileInputStream("c:\\temp\\properties.xml")));
+			XMLDecoder decoder = new XMLDecoder(new BufferedInputStream(new FileInputStream("resource\\properties.xml")));
 			this.properties = (Properties)decoder.readObject();
 			decoder.close();
 		} catch (FileNotFoundException e) { 
@@ -75,6 +76,10 @@ public class MyModel extends Observable implements Model {
 
 		threads = new ArrayList<Thread>();
 		executor = Executors.newFixedThreadPool(properties.getNumberOfThreads());
+	}
+	
+	public Properties getProperties() { 
+		return properties;
 	}
 
 	/* (non-Javadoc)
@@ -301,7 +306,7 @@ public class MyModel extends Observable implements Model {
 		if(!cachedMazes.containsKey(mazes.get(parameters[0]))) {	
 			try {
 				//In case the algorithm is BFS.
-				if(parameters[1].equals("BFS")) { 
+				if(properties.getSolutionAlgorithm().toLowerCase().equals("bfs")) { 
 					//Create a BFS object.
 					BFS<Position> bfs = new BFS<Position>();
 					//Wrap the maze with object adapter.
@@ -317,7 +322,7 @@ public class MyModel extends Observable implements Model {
 					return solutionByBFS;
 				}
 				//In case the algorithm is AStar.
-				else if(parameters[1].equals("AStar")) { 
+				else if(properties.getSolutionAlgorithm().toLowerCase().equals("manhattan")) { 
 					//Create a manhattanDistance object.
 					ManhattanDistance manhattan = new ManhattanDistance();
 					//Wrap the maze with object adapter.
@@ -333,6 +338,23 @@ public class MyModel extends Observable implements Model {
 					this.setChanged();
 					this.notifyObservers("Solution for " + parameters[0] + " is ready.");
 					return solutionByManhattan;
+				}
+				else if(properties.getSolutionAlgorithm().toLowerCase().equals("air")) { 
+					//Create a AirDistance object.
+					AirDistance air = new AirDistance();
+					//Wrap the maze with object adapter.
+					Maze3dSearch search = new Maze3dSearch(mazes.get(parameters[0]));
+					//Create a AStar object.
+					AStar<Position> aStar = new AStar<>(air);
+					//Solve the maze.
+					Solution<Position> solutionByAir = aStar.search(search);
+					//Add solution to the HashMap and send relevant message.
+					solutions.put(parameters[0], solutionByAir);
+					cachedMazes.put(mazes.get(parameters[0]), solutionByAir);
+					this.zipAndSave();
+					this.setChanged();
+					this.notifyObservers("Solution for " + parameters[0] + " is ready.");
+					return solutionByAir;
 				}
 				//Any other case.
 				else { 
@@ -414,5 +436,16 @@ public class MyModel extends Observable implements Model {
 		mazes.put(parameters[0], maze);
 		this.setChanged();
 		this.notifyObservers(answer);
+	}
+
+	@Override
+	public void setProperties(String[] parameters) {
+		try {
+			XMLDecoder decoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(parameters[0])));
+			this.properties = (Properties)decoder.readObject();
+			decoder.close();
+		} catch (FileNotFoundException e) { 
+			e.printStackTrace();
+		}
 	}
 }

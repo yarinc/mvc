@@ -91,4 +91,6 @@ public interface Model {
 	void waitForThreads();
 
 	void solveFromPoint(String[] parameters);
+
+	void setProperties(String[] parameters);
 }

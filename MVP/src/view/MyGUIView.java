@@ -11,6 +11,9 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
@@ -50,74 +53,6 @@ public class MyGUIView extends BasicWindow implements View {
 		board.setPlayer(maze.getStartPosition());
 		board.setStart(new Position(maze.getStartPosition()));
 		board.setEnd(maze.getGoalPosition());
-		board.paint();
-		board.redraw();
-		board.addKeyListener(new KeyAdapter()
-		{	
-			public void keyPressed(KeyEvent e)
-			{					
-				if(e.keyCode == SWT.ARROW_UP) {
-					board.moveUp();
-					board.redraw();
-					if(board.player.equals(board.end)) {
-						board.removeKeyListener(this);
-						hintButton.setEnabled(false);
-						solveButton.setEnabled(false);
-					}
-				}
-				
-				else if(e.keyCode == SWT.ARROW_DOWN) {
-					board.moveDown();
-					board.redraw();
-					if(board.player.equals(board.end)) {
-						board.removeKeyListener(this);
-						hintButton.setEnabled(false);
-						solveButton.setEnabled(false);
-					}
-				}
-				
-				else if(e.keyCode == SWT.ARROW_LEFT) {
-					board.moveLeft();
-					board.redraw();
-					if(board.player.equals(board.end)) {
-						board.removeKeyListener(this);
-						hintButton.setEnabled(false);
-						solveButton.setEnabled(false);
-					}
-				}
-				else if(e.keyCode == SWT.ARROW_RIGHT) {
-					board.moveRight();
-					board.redraw();
-					if(board.player.equals(board.end)) {
-						board.removeKeyListener(this);
-						hintButton.setEnabled(false);
-						solveButton.setEnabled(false);
-					}
-				}
-				else if(e.keyCode == SWT.PAGE_UP) {
-					if((board.player.getLocation().getY() < maze.getBounds().getY()) && (maze.getMazeValue(new Position(board.player.getLocation().getX(),board.player.getLocation().getY() + 1,board.player.getLocation().getZ())) == 0)) {
-						board.moveUpLvl();
-						board.redraw();
-						if(board.player.equals(board.end)) { 
-							board.removeKeyListener(this);
-							hintButton.setEnabled(false);
-							solveButton.setEnabled(false);
-						}
-					}
-				}
-				else if(e.keyCode == SWT.PAGE_DOWN) {
-					if((board.player.getLocation().getY() > 0) && (maze.getMazeValue(new Position(board.player.getLocation().getX(),board.player.getLocation().getY() - 1,board.player.getLocation().getZ())) == 0)) {
-						board.moveDownLvl();
-						board.redraw();
-						if(board.player.equals(board.end)) {
-							board.removeKeyListener(this);
-							hintButton.setEnabled(false);
-							solveButton.setEnabled(false);
-						}
-					}
-				}
-			}
-		});
 	}
 
 	@Override
@@ -148,6 +83,12 @@ public class MyGUIView extends BasicWindow implements View {
 	@Override
 	void initWidgets() {
 		shell.setLayout(new GridLayout(2, false));
+		shell.addListener(SWT.Close, new Listener() {
+	        public void handleEvent(Event event) {
+	        	inputToPresenter("exit");
+	        	shell.dispose();
+	        }
+	    });
 		Menu bar = new Menu (shell, SWT.BAR);
 		shell.setMenuBar(bar);
 		MenuItem fileItem = new MenuItem (bar, SWT.CASCADE);
@@ -156,9 +97,31 @@ public class MyGUIView extends BasicWindow implements View {
 		fileItem.setMenu (submenu);
 		MenuItem openPropertiesItem = new MenuItem (submenu, SWT.PUSH);
 		openPropertiesItem.setText("&Open properties");
+		openPropertiesItem.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+		   		  FileDialog selectFile = new FileDialog(shell);
+		   		  String[] filterExt = {"*.xml"};
+		   		  selectFile.setFilterExtensions(filterExt);
+		   		  String file = selectFile.open();
+		   		  inputToPresenter("properties " + file);
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {}
+		});
 		MenuItem exitItem = new MenuItem (submenu, SWT.PUSH);
 		exitItem.setText("&Exit");
-		
+		exitItem.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				inputToPresenter("exit");
+				shell.dispose();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {}
+		});
 		MenuItem options = new MenuItem (bar, SWT.CASCADE);
 		options.setText("Options");
 		Menu subOptions = new Menu (shell, SWT.DROP_DOWN);
@@ -275,6 +238,80 @@ public class MyGUIView extends BasicWindow implements View {
 					inputToPresenter(command);
 					hintButton.setEnabled(true);
 					solveButton.setEnabled(true);
+					board.paint();
+					board.redraw();
+					board.addKeyListener(new KeyAdapter()
+					{	
+						public void keyPressed(KeyEvent e)
+						{					
+							if(e.keyCode == SWT.ARROW_UP) {
+								board.moveUp();
+								board.redraw();
+								if(board.player.equals(board.end)) {
+									board.removeKeyListener(this);
+									hintButton.setEnabled(false);
+									solveButton.setEnabled(false);
+									displayButton.setEnabled(false);
+								}
+							}
+							
+							else if(e.keyCode == SWT.ARROW_DOWN) {
+								board.moveDown();
+								board.redraw();
+								if(board.player.equals(board.end)) {
+									board.removeKeyListener(this);
+									hintButton.setEnabled(false);
+									solveButton.setEnabled(false);
+									displayButton.setEnabled(false);
+								}
+							}
+							
+							else if(e.keyCode == SWT.ARROW_LEFT) {
+								board.moveLeft();
+								board.redraw();
+								if(board.player.equals(board.end)) {
+									board.removeKeyListener(this);
+									hintButton.setEnabled(false);
+									solveButton.setEnabled(false);
+									displayButton.setEnabled(false);
+								}
+							}
+							else if(e.keyCode == SWT.ARROW_RIGHT) {
+								board.moveRight();
+								board.redraw();
+								if(board.player.equals(board.end)) {
+									board.removeKeyListener(this);
+									hintButton.setEnabled(false);
+									solveButton.setEnabled(false);
+									displayButton.setEnabled(false);
+								}
+							}
+							else if(e.keyCode == SWT.PAGE_UP) {
+								if((board.player.getLocation().getY() < board.fullMaze.getBounds().getY()) && (board.fullMaze.getMazeValue(new Position(board.player.getLocation().getX(),board.player.getLocation().getY() + 1,board.player.getLocation().getZ())) == 0)) {
+									board.moveUpLvl();
+									board.redraw();
+									if(board.player.equals(board.end)) { 
+										board.removeKeyListener(this);
+										hintButton.setEnabled(false);
+										solveButton.setEnabled(false);
+										displayButton.setEnabled(false);
+									}
+								}
+							}
+							else if(e.keyCode == SWT.PAGE_DOWN) {
+								if((board.player.getLocation().getY() > 0) && (board.fullMaze.getMazeValue(new Position(board.player.getLocation().getX(),board.player.getLocation().getY() - 1,board.player.getLocation().getZ())) == 0)) {
+									board.moveDownLvl();
+									board.redraw();
+									if(board.player.equals(board.end)) {
+										board.removeKeyListener(this);
+										hintButton.setEnabled(false);
+										solveButton.setEnabled(false);
+										displayButton.setEnabled(false);
+									}
+								}
+							}
+						}
+					});
 				}
 			}
 			

@@ -29,6 +29,7 @@ public class Presenter implements Observer {
 		map.put("file", new FileSize(this.ui,this.model));
 		map.put("solve", new Solve(this.ui,this.model));
 		map.put("solution", new DisplaySolution(this.ui,this.model));
+		map.put("properties", new LoadProperties(this.ui,this.model));
 		map.put("from", new SolveFrom(this.ui,this.model));
 		map.put("exit", new Exit(this.ui,this.model));
 	}
@@ -85,11 +86,13 @@ public class Presenter implements Observer {
 						break;
 			case "file" : validateCommand(line, "file", 10, 1);
 						break;
-			case "solve" : validateCommand(line, "solve", 6, 2);
+			case "solve" : validateCommand(line, "solve", 6, 1);
 						break;
 			case "from" : validateCommand(line, "from",5, 4);
 						break;
 			case "display" : displayCommands(line, command);
+						break;
+			case "properties" : validateCommand(line, "properties",11, 1);
 						break;
 			case "exit" : validateCommand(line, "exit", 4, 1);
 						break;

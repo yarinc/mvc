@@ -45,8 +45,8 @@ public class Maze2D extends MazeBoard{
 				if(player.getLocation().getY() == end.getLocation().getY())
 					end.paint(e, w, h, new Color(null,0,0,255));
 				if(player.equals(end)) {
-					Image image = new Image(getDisplay(), "C:\\Users\\Yarinc\\Desktop\\win.jpg");
-					e.gc.drawImage(image,0,0, 324,237,(width-324)/2, (height-237)/2,324,237);
+					Image image = new Image(getDisplay(), "resource\\win.jpg");
+					e.gc.drawImage(image,0,0, 236,334,(width-236)/2, (height-334)/2,236,334);
 				}
 			}
 	    });

@@ -13,14 +13,22 @@ import view.MyGUIView;
 public class Run {
 
 	public static void main(String[] args) {
-//		CLI cli = new CLI(new BufferedReader(new InputStreamReader(System.in)),new PrintWriter(System.out));
-//		MyCLIView ui = new MyCLIView(cli);
-		MyGUIView ui = new MyGUIView("Mazer", 500, 500);
-//		cli.setView(ui);
 		MyModel m = new MyModel();
-		Presenter p = new Presenter(ui,m);
-		ui.addObserver(p);
-		m.addObserver(p);
-		ui.start();
+		if(m.getProperties().getViewType().equals("CLI")) { 
+			CLI cli = new CLI(new BufferedReader(new InputStreamReader(System.in)),new PrintWriter(System.out));
+			MyCLIView ui = new MyCLIView(cli);
+			cli.setView(ui);
+			Presenter p = new Presenter(ui,m);
+			ui.addObserver(p);
+			m.addObserver(p);
+			ui.start();
+		}
+		else if(m.getProperties().getViewType().equals("GUI")){
+			MyGUIView ui = new MyGUIView("Mazer", 500, 500);
+			Presenter p = new Presenter(ui,m);
+			ui.addObserver(p);
+			m.addObserver(p);
+			ui.start();
+		}
 	}
 }

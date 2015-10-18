@@ -23,6 +23,8 @@ public class Helper {
     	Properties f1 = new Properties();
     	f1.setNumberOfThreads(2);
     	f1.setCacheFileLocation("c:\\temp\\cachedMazes.gz");
+    	f1.setViewType("GUI");
+    	f1.setSolutionAlgorithm("air");
     	Helper.write(f1, "c:\\temp\\properties.xml");
 
     	Properties f2 = Helper.read("c:\\temp\\properties.xml");

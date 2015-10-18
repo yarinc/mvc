@@ -43,15 +43,15 @@ public class GenerateInput extends Dialog {
         Label lenLabel = new Label(shell, SWT.NULL);
         lenLabel.setText("Length: ");
         Spinner lenSpinner =new Spinner(shell, SWT.BORDER);
-        lenSpinner.setMinimum(2);
+        lenSpinner.setMinimum(3);
         Label heightLabel = new Label(shell, SWT.NULL);
         heightLabel.setText("Height: ");
         Spinner widthSpinner = new Spinner(shell, SWT.BORDER);
-        widthSpinner.setMinimum(2);
+        widthSpinner.setMinimum(3);
         Label widthLabel = new Label(shell, SWT.NULL);
         widthLabel.setText("Width: ");
         Spinner heightSpinner = new Spinner(shell, SWT.BORDER);
-        heightSpinner.setMinimum(2);
+        heightSpinner.setMinimum(3);
         Label nameLabel = new Label(shell, SWT.NULL);
         nameLabel.setText("Name: ");
         Text text = new Text(shell, SWT.SINGLE | SWT.BORDER);
