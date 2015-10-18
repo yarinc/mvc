@@ -167,13 +167,13 @@ public class MyModel implements Model {
 			int sum = 0;
 			//Sum all odd cells on the 36 byte array.
 			while(sum <= 36) {
-				for(int i=1;i<b.length - 1;i=i+2) 
+				for(int i=1;i<b.length;i=i+2) 
 					sum += b[i];
 			}
 			int counter = 0;
 			//Decompress the array to get the original parameters.
 			byte length[] = new byte[sum];
-			for(int i=1;i<b.length - 1;i=i+2){
+			for(int i=1;i<b.length;i=i+2){
 				for(int loop=0;loop<b[i];loop++) {
 					length[counter] = b[i-1];
 					       counter++;
