@@ -1,5 +1,9 @@
 package view;
 
+import algorithms.mazeGenerators.Maze3d;
+import algorithms.mazeGenerators.Position;
+import algorithms.search.Solution;
+
 /**
  * The Interface View.
  */
@@ -22,6 +26,7 @@ public interface View {
 	 */
 	void printString(String string);
 	
+	void printMaze(Maze3d maze);
 	/**
 	 * Prints the given 3D maze.
 	 * @param maze the 3D maze
@@ -34,4 +39,6 @@ public interface View {
 	 * @param line the input
 	 */
 	public void inputToPresenter(String line);
+
+	public void handleSolution(Solution<Position> obj);
 }

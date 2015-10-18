@@ -89,4 +89,6 @@ public interface Model {
 	 * Wait for threads to finish before exiting the CLI.
 	 */
 	void waitForThreads();
+
+	void solveFromPoint(String[] parameters);
 }

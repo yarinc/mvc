@@ -120,7 +120,7 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public void GetMaze(String[] parameters) {
 		this.setChanged();
-		this.notifyObservers(mazes.get(parameters[0]).toString());
+		this.notifyObservers(mazes.get(parameters[0]));
 	}
 
 	/* (non-Javadoc)
@@ -360,7 +360,7 @@ public class MyModel extends Observable implements Model {
 	public void getSolution(String[] parameters) {
 		try { 
 			this.setChanged();
-			this.notifyObservers(solutions.get(parameters[0]).toString());
+			this.notifyObservers(solutions.get(parameters[0]));
 		} catch (NullPointerException e) {
 			//In case an exception throws - send relevant message.
 			this.setChanged();
@@ -399,8 +399,20 @@ public class MyModel extends Observable implements Model {
 		    out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-//			this.setChanged();
-//			this.notifyObservers("Fatal Error.");
 		  }
+	}
+
+	@Override
+	public void solveFromPoint(String[] parameters) {
+		Maze3d maze = new Maze3d(mazes.get(parameters[0]));
+		Position start = maze.getStartPosition();
+		maze.setStartPosition(new Position(Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]),Integer.parseInt(parameters[3])));
+		mazes.put(parameters[0], maze);
+		String[] command = { parameters[0], "AStar" };
+		Solution<Position> answer = this.solutionGenerator(command);
+		maze.setStartPosition(start);
+		mazes.put(parameters[0], maze);
+		this.setChanged();
+		this.notifyObservers(answer);
 	}
 }

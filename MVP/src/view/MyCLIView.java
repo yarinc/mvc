@@ -2,6 +2,10 @@ package view;
 
 import java.util.Observable;
 
+import algorithms.mazeGenerators.Maze3d;
+import algorithms.mazeGenerators.Position;
+import algorithms.search.Solution;
+
 
 /**
  * The Class MyView communicate with the user.
@@ -57,5 +61,17 @@ public class MyCLIView extends Observable implements View {
 	public void inputToPresenter(String line) {
 		this.setChanged();
 		this.notifyObservers(line);
+	}
+
+	@Override
+	public void printMaze(Maze3d maze) {
+		cli.getOut().println(maze.toString()); 
+		cli.getOut().flush();
+	}
+
+	@Override
+	public void handleSolution(Solution<Position> solution) {
+		cli.getOut().println(solution.toString()); 
+		cli.getOut().flush();
 	}
 }

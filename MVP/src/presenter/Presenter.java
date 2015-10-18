@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
+import algorithms.mazeGenerators.Maze3d;
+import algorithms.mazeGenerators.Position;
+import algorithms.search.Solution;
 import model.Model;
 import view.View;
 
@@ -26,8 +29,10 @@ public class Presenter implements Observer {
 		map.put("file", new FileSize(this.ui,this.model));
 		map.put("solve", new Solve(this.ui,this.model));
 		map.put("solution", new DisplaySolution(this.ui,this.model));
+		map.put("from", new SolveFrom(this.ui,this.model));
 		map.put("exit", new Exit(this.ui,this.model));
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public void update(Observable o, Object obj) {
 		if (o == model) { 
@@ -37,6 +42,10 @@ public class Presenter implements Observer {
 				ui.PrintStringArray((String[])obj);
 			else if(obj instanceof int[][]) 
 				ui.PrintCrossMaze((int[][])obj);
+			else if(obj instanceof Maze3d)
+				ui.printMaze((Maze3d)obj);
+			else if(obj instanceof Solution<?>)
+				ui.handleSolution((Solution<Position>)obj);
 		}
 		else if(o == ui) {
 			this.manipulateInput((String)obj);
@@ -77,6 +86,8 @@ public class Presenter implements Observer {
 			case "file" : validateCommand(line, "file", 10, 1);
 						break;
 			case "solve" : validateCommand(line, "solve", 6, 2);
+						break;
+			case "from" : validateCommand(line, "from",5, 4);
 						break;
 			case "display" : displayCommands(line, command);
 						break;
