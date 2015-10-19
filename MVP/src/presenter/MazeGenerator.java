@@ -29,6 +29,9 @@ public class MazeGenerator extends AbstractCommand implements Command, Callable<
 		model.CreateMaze(parameters, this);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.util.concurrent.Callable#call()
+	 */
 	@Override
 	public Maze3d call() throws Exception {
 		return model.MazeGen(parameters);

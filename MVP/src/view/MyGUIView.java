@@ -180,12 +180,13 @@ public class MyGUIView extends BasicWindow implements View {
 		saveItem.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				//Open SaveMaze dialog and if the parameters aren't null - run the run the save command.
+				//Open SaveMaze dialog and if the parameters aren't null - run the run the save command and enable the display button.
 				SaveMaze save = new SaveMaze(shell);
 				String parameters = save.open();
 				if(parameters != null) {
 					String command = "save maze " + parameters;
 					inputToPresenter(command);
+					displayButton.setEnabled(true);
 				}
 			}
 			
