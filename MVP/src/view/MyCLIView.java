@@ -7,6 +7,7 @@ import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class MyView communicate with the user.
  */
@@ -30,6 +31,9 @@ public class MyCLIView extends Observable implements View {
 		 cli.start();
 	}
 
+	/* (non-Javadoc)
+	 * @see view.View#PrintStringArray(java.lang.String[])
+	 */
 	@Override
 	public void PrintStringArray(String[] string) {
 		for(String s:string)
@@ -37,12 +41,18 @@ public class MyCLIView extends Observable implements View {
 		cli.getOut().flush();
 	}
 
+	/* (non-Javadoc)
+	 * @see view.View#printString(java.lang.String)
+	 */
 	@Override
 	public void printString(String string) {
 		cli.getOut().println(string); 
 		cli.getOut().flush();
 	}
 
+	/* (non-Javadoc)
+	 * @see view.View#PrintCrossMaze(int[][])
+	 */
 	@Override
 	public void PrintCrossMaze(int[][] maze2d) {
 		int i,j;
@@ -58,17 +68,27 @@ public class MyCLIView extends Observable implements View {
 		cli.getOut().print("\n");
 		cli.getOut().flush();
 	}
+	
+	/* (non-Javadoc)
+	 * @see view.View#inputToPresenter(java.lang.String)
+	 */
 	public void inputToPresenter(String line) {
 		this.setChanged();
 		this.notifyObservers(line);
 	}
 
+	/* (non-Javadoc)
+	 * @see view.View#printMaze(algorithms.mazeGenerators.Maze3d)
+	 */
 	@Override
 	public void printMaze(Maze3d maze) {
 		cli.getOut().println(maze.toString()); 
 		cli.getOut().flush();
 	}
 
+	/* (non-Javadoc)
+	 * @see view.View#handleSolution(algorithms.search.Solution)
+	 */
 	@Override
 	public void handleSolution(Solution<Position> solution) {
 		cli.getOut().println(solution.toString()); 
