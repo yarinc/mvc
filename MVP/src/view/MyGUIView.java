@@ -80,7 +80,7 @@ public class MyGUIView extends BasicWindow implements View {
 	 */
 	@Override
 	public void printString(String string) {
-		//If the recieved string doesn't start with "Solution", Pop a relevant message.
+		//If the received string doesn't start with "Solution", Pop a relevant message.
 		if(!string.startsWith("Solution")) {
 			display.syncExec(new Runnable() {
 				public void run() {
