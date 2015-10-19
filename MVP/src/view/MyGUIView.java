@@ -21,7 +21,7 @@ import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
 
 /**
- * The Class MyGUIView.
+ * The Class MyGUIView is a class for playing a 3d maze in GUI application.
  */
 public class MyGUIView extends BasicWindow implements View {
 	
