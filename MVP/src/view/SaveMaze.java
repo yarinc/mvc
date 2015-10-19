@@ -38,7 +38,7 @@ public class SaveMaze extends Dialog {
 	/**
 	 * Instantiates a new SaveMaze object.
 	 *
-	 * @param parant the parent shell
+	 * @param parent the parent shell
 	 * @param style the style
 	 */
 	public SaveMaze(Shell parent, int style) {

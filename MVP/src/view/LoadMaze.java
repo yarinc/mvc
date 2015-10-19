@@ -36,7 +36,7 @@ public class LoadMaze extends Dialog {
 	/**
 	 * Instantiates a new load maze window.
 	 *
-	 * @param parant The parent shell
+	 * @param parent The parent shell
 	 * @param style The style
 	 */
 	public LoadMaze(Shell parent, int style) {
