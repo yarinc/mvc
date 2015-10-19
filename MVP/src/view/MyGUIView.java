@@ -31,6 +31,7 @@ public class MyGUIView extends BasicWindow implements View {
 	private Timer timer;
 	private TimerTask task;
 	private KeyPress key;
+	
 	public MyGUIView(String title, int width, int height) {
 		super(title, width, height);
 	}
@@ -239,7 +240,7 @@ public class MyGUIView extends BasicWindow implements View {
 					solveButton.setEnabled(true);
 					board.paint();
 					board.redraw();
-					key = new KeyPress(board, hintButton, solveButton, displayButton);
+					key = new KeyPress(board, hintButton, solveButton);
 					board.addKeyListener(key);
 				}
 			}
@@ -261,7 +262,6 @@ public class MyGUIView extends BasicWindow implements View {
 				board.setCharacterPosition(solution.getSolution().get(0));
 				if(board.player.getLocation().equals(board.end.getLocation())) {
 					hintButton.setEnabled(false);
-					displayButton.setEnabled(false);
 					solveButton.setEnabled(false);
 				}
 				board.redraw();
@@ -278,8 +278,9 @@ public class MyGUIView extends BasicWindow implements View {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 				hintButton.setEnabled(false);
-				displayButton.setEnabled(false);
 				solveButton.setEnabled(false);
+				generateButton.setEnabled(false);
+				displayButton.setEnabled(false);
 				String command = "from " + currentMaze + " " + board.player.getLocation().getX() + " " + board.player.getLocation().getY() + " " + board.player.getLocation().getZ();
 				inputToPresenter(command);
 				solution.getSolution().remove(0);
@@ -293,6 +294,8 @@ public class MyGUIView extends BasicWindow implements View {
 										if(board.player.getLocation().equals(board.end.getLocation())) {
 											task.cancel();
 											timer.cancel();
+											generateButton.setEnabled(true);
+											displayButton.setEnabled(true);
 										}
 										else {
 											board.setCharacterPosition(solution.getSolution().get(0));

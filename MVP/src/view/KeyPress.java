@@ -11,14 +11,12 @@ public class KeyPress implements KeyListener {
 	private MazeBoard board;
 	private Button hintButton;
 	private Button solveButton;
-	private Button displayButton;
 	
 	
-	public KeyPress(MazeBoard board, Button hintButton, Button solveButton, Button displayButton) {
+	public KeyPress(MazeBoard board, Button hintButton, Button solveButton) {
 		this.board = board;
 		this.hintButton = hintButton;
 		this.solveButton = solveButton;
-		this.displayButton = displayButton;
 	}
 
 	@Override
@@ -30,7 +28,6 @@ public class KeyPress implements KeyListener {
 				board.removeKeyListener(this);
 				hintButton.setEnabled(false);
 				solveButton.setEnabled(false);
-				displayButton.setEnabled(false);
 			}
 		}
 		
@@ -41,7 +38,6 @@ public class KeyPress implements KeyListener {
 				board.removeKeyListener(this);
 				hintButton.setEnabled(false);
 				solveButton.setEnabled(false);
-				displayButton.setEnabled(false);
 			}
 		}
 		
@@ -52,7 +48,6 @@ public class KeyPress implements KeyListener {
 				board.removeKeyListener(this);
 				hintButton.setEnabled(false);
 				solveButton.setEnabled(false);
-				displayButton.setEnabled(false);
 			}
 		}
 		else if(e.keyCode == SWT.ARROW_RIGHT) {
@@ -62,7 +57,6 @@ public class KeyPress implements KeyListener {
 				board.removeKeyListener(this);
 				hintButton.setEnabled(false);
 				solveButton.setEnabled(false);
-				displayButton.setEnabled(false);
 			}
 		}
 		else if(e.keyCode == SWT.PAGE_UP) {
@@ -73,7 +67,6 @@ public class KeyPress implements KeyListener {
 					board.removeKeyListener(this);
 					hintButton.setEnabled(false);
 					solveButton.setEnabled(false);
-					displayButton.setEnabled(false);
 				}
 			}
 		}
@@ -85,7 +78,6 @@ public class KeyPress implements KeyListener {
 					board.removeKeyListener(this);
 					hintButton.setEnabled(false);
 					solveButton.setEnabled(false);
-					displayButton.setEnabled(false);
 				}
 			}
 		}
