@@ -89,9 +89,6 @@ public class MyGUIView extends BasicWindow implements View {
 					message.setMessage(string);
 					message.setText("Message");
 					message.open();
-					//If message is Goodbye - close the program.
-					if(string.equals("Goodbye"))
-						System.exit(0);
 				}
 			});
 		}
@@ -126,6 +123,7 @@ public class MyGUIView extends BasicWindow implements View {
 	        	//exit application when pressing the X button.
 	        	inputToPresenter("exit");
 	        	shell.dispose();
+	        	System.exit(0);
 	        }
 	    });
 		//Create a menu bar.
@@ -166,6 +164,7 @@ public class MyGUIView extends BasicWindow implements View {
 				//exit application when pressing the X button.
 				inputToPresenter("exit");
 				shell.dispose();
+	        	System.exit(0);
 			}
 			
 			@Override
