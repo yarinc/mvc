@@ -47,7 +47,6 @@ public class MyModel extends Observable implements Model {
 	private ExecutorService executor;
 	private Properties properties;
 
-	
 	/**
 	 * Instantiates a new MyModel object.
 	 */
@@ -56,6 +55,7 @@ public class MyModel extends Observable implements Model {
 		mazes = new HashMap<String,Maze3d>();
 		solutions = new HashMap<String,Solution<Position>>();
 		files = new HashMap<String,String>();
+		//Try to load XML from file.
 		try {
 			XMLDecoder decoder = new XMLDecoder(new BufferedInputStream(new FileInputStream("resource\\properties.xml")));
 			this.properties = (Properties)decoder.readObject();
@@ -63,6 +63,7 @@ public class MyModel extends Observable implements Model {
 		} catch (FileNotFoundException e) { 
 			e.printStackTrace();
 		}
+		//Try to load the cached mazes file.
 		try {
 				FileInputStream fis=new FileInputStream(properties.getCacheFileLocation());
 				cachedMazes = new HashMap<Maze3d,Solution<Position>>();
@@ -78,6 +79,11 @@ public class MyModel extends Observable implements Model {
 		executor = Executors.newFixedThreadPool(properties.getNumberOfThreads());
 	}
 	
+	/**
+	 * Gets the properties.
+	 *
+	 * @return the properties
+	 */
 	public Properties getProperties() { 
 		return properties;
 	}
@@ -411,7 +417,12 @@ public class MyModel extends Observable implements Model {
 		this.setChanged();
 		this.notifyObservers("Goodbye.");
 	}
+	
+	/**
+	 * Zip and save.
+	 */
 	public void zipAndSave(){
+		//Try to zip and save the cached mazes file to the disk.
 		try {
 			FileOutputStream fos=new FileOutputStream(properties.getCacheFileLocation());
 		    GZIPOutputStream gzos=new GZIPOutputStream(fos);
@@ -424,22 +435,34 @@ public class MyModel extends Observable implements Model {
 		  }
 	}
 
+	/* (non-Javadoc)
+	 * @see model.Model#solveFromPoint(java.lang.String[])
+	 */
 	@Override
 	public void solveFromPoint(String[] parameters) {
+		//Create new 3d maze object and change it's start position.
 		Maze3d maze = new Maze3d(mazes.get(parameters[0]));
 		Position start = maze.getStartPosition();
 		maze.setStartPosition(new Position(Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]),Integer.parseInt(parameters[3])));
+		//put it in the mazes HashMap and solve the maze.
 		mazes.put(parameters[0], maze);
 		String[] command = {parameters[0]};
 		Solution<Position> answer = this.solutionGenerator(command);
+		//Revert the maze to the old start position.
 		maze.setStartPosition(start);
+		//put it again in the maze HashMap.
 		mazes.put(parameters[0], maze);
+		//Send message.
 		this.setChanged();
 		this.notifyObservers(answer);
 	}
 
+	/* (non-Javadoc)
+	 * @see model.Model#setProperties(java.lang.String[])
+	 */
 	@Override
 	public void setProperties(String[] parameters) {
+		//Try to load the XML file to the properties variable.
 		try {
 			XMLDecoder decoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(parameters[0])));
 			this.properties = (Properties)decoder.readObject();

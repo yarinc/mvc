@@ -13,20 +13,25 @@ public interface Model {
 
 	/**
 	 * Generate an array of all file and folders on the given path.
+	 *
 	 * @param string the path
+	 * @return the dir
 	 */
 	void getDir(String string);
 	
 	/**
 	 * Starting a thread that creates maze with the given parameters.
+	 *
 	 * @param parameters the parameters
-	 * @param mazeGenerator 
+	 * @param mazeGenerator the maze generator
 	 */
 	void CreateMaze(String[] parameters, MazeGenerator mazeGenerator);
 	
 	/**
 	 * Generate maze with the given parameters.
+	 *
 	 * @param parameters the parameters
+	 * @return the maze3d
 	 */
 	Maze3d MazeGen(String[] parameters);
 	
@@ -68,20 +73,25 @@ public interface Model {
 	
 	/**
 	 * Starting a thread that solves maze with the given algorithm in the parameters.
+	 *
 	 * @param parameters the parameters
-	 * @param solve 
+	 * @param solve the solve
 	 */
 	void solveMaze(String[] parameters, Solve solve);
 	
 	/**
 	 * Solve a maze with the given algorithm.
+	 *
 	 * @param parameters the parameters
+	 * @return the solution
 	 */
 	Solution<Position> solutionGenerator(String[] parameters);
 	
 	/**
 	 * Sending the solution to a maze to the view.
+	 *
 	 * @param parameters the parameters
+	 * @return the solution
 	 */
 	void getSolution(String[] parameters);
 	
@@ -90,7 +100,17 @@ public interface Model {
 	 */
 	void waitForThreads();
 
+	/**
+	 * Solve maze from a given position 
+	 *
+	 * @param parameters the parameters
+	 */
 	void solveFromPoint(String[] parameters);
 
+	/**
+	 * Sets the properties from an XML file.
+	 *
+	 * @param parameters the new properties
+	 */
 	void setProperties(String[] parameters);
 }
