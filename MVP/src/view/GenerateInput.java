@@ -20,7 +20,6 @@ import org.eclipse.swt.widgets.Text;
  * The Class GenerateInput opens a dialog window for entering parameters of the wanted maze.
  */
 public class GenerateInput extends Dialog {
-	
 	private int width;
 	private int length;
 	private int height;

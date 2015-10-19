@@ -10,11 +10,26 @@ import algorithms.search.Solution;
 import model.Model;
 import view.View;
 
+/**
+ * The Class Presenter.
+ */
 public class Presenter implements Observer {
+	
+	/** The model. */
 	private Model model;
+	
+	/** The ui. */
 	private View ui;
+	
+	/** The map. */
 	private HashMap<String,Command> map;
 
+	/**
+	 * Instantiates a new presenter.
+	 *
+	 * @param ui the ui
+	 * @param model the model
+	 */
 	public Presenter(View ui, Model model) {
 		this.model = model;
 		this.ui = ui;
@@ -33,6 +48,10 @@ public class Presenter implements Observer {
 		map.put("from", new SolveFrom(this.ui,this.model));
 		map.put("exit", new Exit(this.ui,this.model));
 	}
+	
+	/* (non-Javadoc)
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void update(Observable o, Object obj) {
@@ -53,6 +72,13 @@ public class Presenter implements Observer {
 		}
 		
 	}
+	
+	/**
+	 * Activate command.
+	 *
+	 * @param string the string
+	 * @param parameters the parameters
+	 */
 	public void activateCommand(String string, String[] parameters) {
 		try { 
 			map.get(string).doCommand(parameters);
@@ -62,6 +88,11 @@ public class Presenter implements Observer {
 		}
 	}
 	
+	/**
+	 * Manipulate input.
+	 *
+	 * @param line the line
+	 */
 	/* (non-Javadoc)
 	 * @see controller.Controller#manipulateInput(java.lang.String)
 	 */

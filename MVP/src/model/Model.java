@@ -15,6 +15,7 @@ public interface Model {
 	 * Generate an array of all file and folders on the given path.
 	 *
 	 * @param string the path
+	 * @return the dir
 	 */
 	void getDir(String string);
 	
@@ -90,6 +91,7 @@ public interface Model {
 	 * Sending the solution to a maze to the view.
 	 *
 	 * @param parameters the parameters
+	 * @return the solution
 	 */
 	void getSolution(String[] parameters);
 	
@@ -99,7 +101,7 @@ public interface Model {
 	void waitForThreads();
 
 	/**
-	 * Solve maze from a given position 
+	 * Solve maze from a given position .
 	 *
 	 * @param parameters the parameters
 	 */

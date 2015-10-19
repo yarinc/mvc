@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Text;
  * The Class SaveMaze opens a dialog window for entering parameters for saving a maze.
  */
 public class SaveMaze extends Dialog {
-	
+
 	private String name;
 	private String file;
 	private String path;

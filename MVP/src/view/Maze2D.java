@@ -13,7 +13,6 @@ import algorithms.mazeGenerators.Position;
  */
 public class Maze2D extends MazeBoard{
 
-
 	 /**
  	 * Instantiates a new maze2D object.
  	 *

@@ -8,6 +8,7 @@ import view.View;
  * that represent a command which implements Command interface. 
  */
 public abstract class AbstractCommand {
+	
 	protected View view;
 	protected Model model;
 	protected String[] parameters;

@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Text;
  * The Class MazeInfo open a dialog for entering a maze name.
  */
 public class MazeInfo extends Dialog {
-	
+
 	private String name;
 	
 	  /**

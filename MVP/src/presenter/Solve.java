@@ -31,6 +31,9 @@ public class Solve extends AbstractCommand implements Command, Callable<Solution
 
 	}
 
+	/* (non-Javadoc)
+	 * @see java.util.concurrent.Callable#call()
+	 */
 	@Override
 	public Solution<Position> call() throws Exception {
 		return model.solutionGenerator(parameters);

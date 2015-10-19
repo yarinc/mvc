@@ -32,6 +32,8 @@ public class KeyPress implements KeyListener {
 
 	/**
 	 *  Invoked when a key has been pressed.
+	 *
+	 * @param e the e
 	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -110,6 +112,8 @@ public class KeyPress implements KeyListener {
 
 	/**
 	 * Invoked when a key has been released.
+	 *
+	 * @param arg0 the arg0
 	 */
 	@Override
 	public void keyReleased(KeyEvent arg0) { }

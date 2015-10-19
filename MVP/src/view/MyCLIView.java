@@ -7,12 +7,12 @@ import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class MyView communicate with the user.
  */
 public class MyCLIView extends Observable implements View {
 
+	/** The cli. */
 	private CLI cli;
 	
 	/**
@@ -48,6 +48,8 @@ public class MyCLIView extends Observable implements View {
 	public void printString(String string) {
 		cli.getOut().println(string); 
 		cli.getOut().flush();
+		if(string.equals("Goodbye"))
+			System.exit(0);
 	}
 
 	/* (non-Javadoc)

@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-
 /**
  * The Class CLI starts in a new thread a CLI for the user.
  */
@@ -13,6 +12,7 @@ public class CLI implements Runnable {
 	private BufferedReader in; 
 	private PrintWriter out;
 	private View view;
+	
 	/**
 	 * Gets in.
 	 * @return the in

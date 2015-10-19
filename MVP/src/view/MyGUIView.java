@@ -20,6 +20,7 @@ import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
 
+
 /**
  * The Class MyGUIView is a class for playing a 3d maze in GUI application.
  */
@@ -88,6 +89,9 @@ public class MyGUIView extends BasicWindow implements View {
 					message.setMessage(string);
 					message.setText("Message");
 					message.open();
+					//If message is Goodbye - close the program.
+					if(string.equals("Goodbye"))
+						System.exit(0);
 				}
 			});
 		}
