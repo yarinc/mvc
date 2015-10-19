@@ -430,7 +430,7 @@ public class MyModel extends Observable implements Model {
 		Position start = maze.getStartPosition();
 		maze.setStartPosition(new Position(Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]),Integer.parseInt(parameters[3])));
 		mazes.put(parameters[0], maze);
-		String[] command = { parameters[0], "AStar" };
+		String[] command = {parameters[0]};
 		Solution<Position> answer = this.solutionGenerator(command);
 		maze.setStartPosition(start);
 		mazes.put(parameters[0], maze);

@@ -69,31 +69,28 @@ public class Maze2D extends MazeBoard{
 	public void moveDown() {
 		if ((player.getLocation().getZ() < (mazeData[player.getLocation().getZ()].length) - 1) && (mazeData[player.getLocation().getX()][player.getLocation().getZ() + 1] == 0))
 			player.getLocation().setZ(player.getLocation().getZ() + 1);
-		
 	}
 
 	@Override
 	public void moveLeft() {
 		if ((player.getLocation().getX() > 0) && (mazeData[player.getLocation().getX() - 1][player.getLocation().getZ()] == 0))
 			player.getLocation().setX(player.getLocation().getX() - 1);
-		
 	}
 
 	@Override
 	public void moveRight() {
-		if ((player.getLocation().getX() < (mazeData.length) - 1) && (mazeData[player.getLocation().getX() + 1][player.getLocation().getZ()] == 0))
+		if ((player.getLocation().getX() < (mazeData.length) - 1) && (mazeData[player.getLocation().getX() + 1][player.getLocation().getZ()] == 0)) 
 			player.getLocation().setX(player.getLocation().getX() + 1);
-		
 	}
 
 	@Override
 	public void moveUpLvl() {
-			player.getLocation().setY(player.getLocation().getY() + 1);
+		player.getLocation().setY(player.getLocation().getY() + 1);
 	}
 
 	@Override
 	public void moveDownLvl() {
 		player.getLocation().setY(player.getLocation().getY() - 1);
-		
+
 	}
 }

@@ -39,19 +39,20 @@ public class GenerateInput extends Dialog {
         shell.setSize(200, 200);
         shell.setText(getText());
         shell.setLayout(new GridLayout(2, false));
-        // Your code goes here (widget creation, set result, etc).
+        // Widgets for choosing maze size.
         Label lenLabel = new Label(shell, SWT.NULL);
         lenLabel.setText("Length: ");
         Spinner lenSpinner =new Spinner(shell, SWT.BORDER);
-        lenSpinner.setMinimum(3);
+        lenSpinner.setMinimum(5);
         Label heightLabel = new Label(shell, SWT.NULL);
         heightLabel.setText("Height: ");
         Spinner widthSpinner = new Spinner(shell, SWT.BORDER);
-        widthSpinner.setMinimum(3);
+        widthSpinner.setMinimum(5);
         Label widthLabel = new Label(shell, SWT.NULL);
         widthLabel.setText("Width: ");
         Spinner heightSpinner = new Spinner(shell, SWT.BORDER);
-        heightSpinner.setMinimum(3);
+        heightSpinner.setMinimum(5);
+        //Widget for choosing maze name.
         Label nameLabel = new Label(shell, SWT.NULL);
         nameLabel.setText("Name: ");
         Text text = new Text(shell, SWT.SINGLE | SWT.BORDER);

@@ -11,7 +11,7 @@
    <string>air</string>
   </void>
   <void property="viewType">
-   <string>CLI</string>
+   <string>GUI</string>
   </void>
  </object>
 </java>

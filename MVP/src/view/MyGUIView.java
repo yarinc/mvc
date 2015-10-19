@@ -4,8 +4,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -30,8 +28,9 @@ public class MyGUIView extends BasicWindow implements View {
 	private Button solveButton;
 	private String currentMaze;
 	private Solution<Position> solution;
-	Timer timer;
-	TimerTask task;
+	private Timer timer;
+	private TimerTask task;
+	private KeyPress key;
 	public MyGUIView(String title, int width, int height) {
 		super(title, width, height);
 	}
@@ -49,6 +48,7 @@ public class MyGUIView extends BasicWindow implements View {
 	
 	@Override
 	public void printMaze(Maze3d maze) {
+		board.getListeners(SWT.KeyDown);
 		board.setFullMaze(maze);
 		board.setPlayer(maze.getStartPosition());
 		board.setStart(new Position(maze.getStartPosition()));
@@ -217,9 +217,8 @@ public class MyGUIView extends BasicWindow implements View {
 			public void widgetDefaultSelected(SelectionEvent arg0) {}
 		});
 		
-		MazeBoard mazeBoard = new Maze2D(shell, SWT.BORDER);
-		mazeBoard.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true,1,5));
-		board = mazeBoard;
+		board = new Maze2D(shell, SWT.BORDER);
+		board.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true,1,5));
 		
 		displayButton=new Button(shell, SWT.PUSH);
 		displayButton.setText("Display");
@@ -231,87 +230,17 @@ public class MyGUIView extends BasicWindow implements View {
 				MazeInfo maze = new MazeInfo(shell);
 				String parameters = maze.open();
 				if(parameters != null) {
-					MazeBoard mazeBoard = new Maze2D(shell, SWT.BORDER);
-					mazeBoard.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true,1,5));
 					String command = "display " + parameters;
 					currentMaze = parameters;
 					inputToPresenter(command);
+					if(key != null)
+						board.removeKeyListener(key);
 					hintButton.setEnabled(true);
 					solveButton.setEnabled(true);
 					board.paint();
 					board.redraw();
-					board.addKeyListener(new KeyAdapter()
-					{	
-						public void keyPressed(KeyEvent e)
-						{					
-							if(e.keyCode == SWT.ARROW_UP) {
-								board.moveUp();
-								board.redraw();
-								if(board.player.equals(board.end)) {
-									board.removeKeyListener(this);
-									hintButton.setEnabled(false);
-									solveButton.setEnabled(false);
-									displayButton.setEnabled(false);
-								}
-							}
-							
-							else if(e.keyCode == SWT.ARROW_DOWN) {
-								board.moveDown();
-								board.redraw();
-								if(board.player.equals(board.end)) {
-									board.removeKeyListener(this);
-									hintButton.setEnabled(false);
-									solveButton.setEnabled(false);
-									displayButton.setEnabled(false);
-								}
-							}
-							
-							else if(e.keyCode == SWT.ARROW_LEFT) {
-								board.moveLeft();
-								board.redraw();
-								if(board.player.equals(board.end)) {
-									board.removeKeyListener(this);
-									hintButton.setEnabled(false);
-									solveButton.setEnabled(false);
-									displayButton.setEnabled(false);
-								}
-							}
-							else if(e.keyCode == SWT.ARROW_RIGHT) {
-								board.moveRight();
-								board.redraw();
-								if(board.player.equals(board.end)) {
-									board.removeKeyListener(this);
-									hintButton.setEnabled(false);
-									solveButton.setEnabled(false);
-									displayButton.setEnabled(false);
-								}
-							}
-							else if(e.keyCode == SWT.PAGE_UP) {
-								if((board.player.getLocation().getY() < board.fullMaze.getBounds().getY()) && (board.fullMaze.getMazeValue(new Position(board.player.getLocation().getX(),board.player.getLocation().getY() + 1,board.player.getLocation().getZ())) == 0)) {
-									board.moveUpLvl();
-									board.redraw();
-									if(board.player.equals(board.end)) { 
-										board.removeKeyListener(this);
-										hintButton.setEnabled(false);
-										solveButton.setEnabled(false);
-										displayButton.setEnabled(false);
-									}
-								}
-							}
-							else if(e.keyCode == SWT.PAGE_DOWN) {
-								if((board.player.getLocation().getY() > 0) && (board.fullMaze.getMazeValue(new Position(board.player.getLocation().getX(),board.player.getLocation().getY() - 1,board.player.getLocation().getZ())) == 0)) {
-									board.moveDownLvl();
-									board.redraw();
-									if(board.player.equals(board.end)) {
-										board.removeKeyListener(this);
-										hintButton.setEnabled(false);
-										solveButton.setEnabled(false);
-										displayButton.setEnabled(false);
-									}
-								}
-							}
-						}
-					});
+					key = new KeyPress(board, hintButton, solveButton, displayButton);
+					board.addKeyListener(key);
 				}
 			}
 			
@@ -386,4 +315,5 @@ public class MyGUIView extends BasicWindow implements View {
 	public void handleSolution(Solution<Position> solution) {
 		this.solution = solution;
 	}
+	
 }
