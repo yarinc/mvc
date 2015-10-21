@@ -66,12 +66,12 @@ public class GenerateInput extends Dialog {
         lenSpinner.setMinimum(5);
         Label heightLabel = new Label(shell, SWT.NULL);
         heightLabel.setText("Height: ");
-        Spinner widthSpinner = new Spinner(shell, SWT.BORDER);
-        widthSpinner.setMinimum(5);
-        Label widthLabel = new Label(shell, SWT.NULL);
-        widthLabel.setText("Width: ");
         Spinner heightSpinner = new Spinner(shell, SWT.BORDER);
         heightSpinner.setMinimum(5);
+        Label widthLabel = new Label(shell, SWT.NULL);
+        widthLabel.setText("Width: ");
+        Spinner widthSpinner = new Spinner(shell, SWT.BORDER);
+        widthSpinner.setMinimum(5);
         //Widget for choosing maze name.
         Label nameLabel = new Label(shell, SWT.NULL);
         nameLabel.setText("Name: ");

@@ -44,14 +44,13 @@ public class Maze2D extends MazeBoard{
 				int w=width/mazeData.length;
 				int h=height/mazeData[0].length;
 				//Drawing walls.
-				for(int i=0;i<mazeData.length;i++) {
-					for(int j=0;j<mazeData[i].length;j++){
-						int x=j*w;
-					          int y=i*h;
-					          if(mazeData[j][i]!=0)
-					        	  e.gc.fillRectangle(x,y,w,h);
-					}
-				}
+				   for(int i=0;i<mazeData.length;i++)
+					      for(int j=0;j<mazeData[i].length;j++){
+					          int x=i*w;
+					          int y=j*h;
+					          if(mazeData[i][j]!=0)
+					              e.gc.fillRectangle(x,y,w,h);
+					      }
 				//Painting the player, end point and start point
 				player.paint(e, w,h, new Color(null,255,0,0));
 				if(player.getLocation().getY() == start.getLocation().getY())
@@ -89,7 +88,7 @@ public class Maze2D extends MazeBoard{
 	 */
 	@Override
 	public void moveDown() {
-		if ((player.getLocation().getZ() < (mazeData[player.getLocation().getZ()].length) - 1) && (mazeData[player.getLocation().getX()][player.getLocation().getZ() + 1] == 0))
+		if ((player.getLocation().getZ() < (mazeData[player.getLocation().getX()].length) - 1) && (mazeData[player.getLocation().getX()][player.getLocation().getZ() + 1] == 0))
 			player.getLocation().setZ(player.getLocation().getZ() + 1);
 	}
 

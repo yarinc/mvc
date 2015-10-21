@@ -14,14 +14,9 @@ import view.View;
  * The Class Presenter.
  */
 public class Presenter implements Observer {
-	
-	/** The model. */
+
 	private Model model;
-	
-	/** The ui. */
 	private View ui;
-	
-	/** The map. */
 	private HashMap<String,Command> map;
 
 	/**
